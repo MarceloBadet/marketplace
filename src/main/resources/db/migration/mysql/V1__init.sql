@@ -4,7 +4,7 @@
 --
 --
 CREATE TABLE `categoria` (
-  `idCategoria` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `nome` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -12,13 +12,13 @@ CREATE TABLE `categoria` (
 -- Indexes for table `categoria`
 --
 ALTER TABLE `categoria`
-  ADD PRIMARY KEY (`idCategoria`);
+  ADD PRIMARY KEY (`id`);
  
 --
 -- AUTO_INCREMENT for table `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `idCategoria` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 
 
@@ -28,7 +28,7 @@ ALTER TABLE `categoria`
 --
 --
 CREATE TABLE `comprador` (
-  `idComprador` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `nome` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -36,13 +36,13 @@ CREATE TABLE `comprador` (
 -- Indexes for table `comprador`
 --
 ALTER TABLE `comprador`
-  ADD PRIMARY KEY (`idComprador`);
+  ADD PRIMARY KEY (`id`);
  
 --
 -- AUTO_INCREMENT for table `comprador`
 --
 ALTER TABLE `comprador`
-  MODIFY `idComprador` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 
 --
@@ -51,7 +51,7 @@ ALTER TABLE `comprador`
 --
 --
 CREATE TABLE `vendedor` (
-  `idVendedor` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `nome` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -59,13 +59,13 @@ CREATE TABLE `vendedor` (
 -- Indexes for table `vendedor`
 --
 ALTER TABLE `vendedor`
-  ADD PRIMARY KEY (`idVendedor`);
+  ADD PRIMARY KEY (`id`);
  
 --
 -- AUTO_INCREMENT for table `vendedor`
 --
 ALTER TABLE `vendedor`
-  MODIFY `idVendedor` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 --
@@ -73,7 +73,7 @@ ALTER TABLE `vendedor`
 --
 --
 CREATE TABLE `produto` (
-  `idProduto` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `nome` varchar(255) NOT NULL, 
   `descricao` varchar(1000) NOT NULL,
   `idCategoria` bigint(20),
@@ -85,18 +85,18 @@ CREATE TABLE `produto` (
 -- Indexes for table `produto`
 --
 ALTER TABLE `produto`
-  ADD PRIMARY KEY (`idProduto`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for table `produto`
 --
 ALTER TABLE `produto`
-  MODIFY `idProduto` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- FOREIGN_KEY for `categoria`
 --
-ALTER TABLE `produto` ADD CONSTRAINT `fk_categoria` FOREIGN KEY ( `idCategoria` ) REFERENCES `categoria` ( `idCategoria` );
+ALTER TABLE `produto` ADD CONSTRAINT `fk_categoria` FOREIGN KEY ( `idCategoria` ) REFERENCES `categoria` ( `id` );
 
 --
 --
@@ -104,7 +104,7 @@ ALTER TABLE `produto` ADD CONSTRAINT `fk_categoria` FOREIGN KEY ( `idCategoria` 
 --
 --
 CREATE TABLE `venda` (
-  `idVenda` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `idVendedor` bigint(20), 
   `idComprador` bigint(20), 
   `dataVenda` datetime NOT NULL
@@ -114,19 +114,19 @@ CREATE TABLE `venda` (
 -- Indexes for table `venda`
 --
 ALTER TABLE `venda`
-  ADD PRIMARY KEY (`idVenda`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for table `venda`
 --
 ALTER TABLE `venda`
-  MODIFY `idVenda` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- FOREIGN_KEY for `vendendor`, `comprador`
 --
-ALTER TABLE `venda` ADD CONSTRAINT `fk_vendedor` FOREIGN KEY ( `idVendedor` ) REFERENCES `vendedor` ( `idVendedor` );
-ALTER TABLE `venda` ADD CONSTRAINT `fk_comprador` FOREIGN KEY ( `idComprador` ) REFERENCES `comprador` ( `idComprador` );
+ALTER TABLE `venda` ADD CONSTRAINT `fk_vendedor` FOREIGN KEY ( `idVendedor` ) REFERENCES `vendedor` ( `id` );
+ALTER TABLE `venda` ADD CONSTRAINT `fk_comprador` FOREIGN KEY ( `idComprador` ) REFERENCES `comprador` ( `id` );
 
   
 --
@@ -135,7 +135,7 @@ ALTER TABLE `venda` ADD CONSTRAINT `fk_comprador` FOREIGN KEY ( `idComprador` ) 
 --
 --
 CREATE TABLE `itemVenda` (
-  `idItemVenda` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `idVenda` bigint(20), 
   `idProduto` bigint(20), 
   `quantidade` int, 
@@ -146,19 +146,19 @@ CREATE TABLE `itemVenda` (
 -- Indexes for table `itemVenda`
 --
 ALTER TABLE `itemVenda`
-  ADD PRIMARY KEY (`idItemVenda`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for table `itemVenda`
 --
 ALTER TABLE `itemVenda`
-  MODIFY `idItemVenda` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- FOREIGN_KEY for `venda`, `produto`
 --
-ALTER TABLE `itemVenda` ADD CONSTRAINT `fk_venda` FOREIGN KEY ( `idVenda` ) REFERENCES `venda` ( `idVenda` );
-ALTER TABLE `itemVenda` ADD CONSTRAINT `fk_produto` FOREIGN KEY ( `idProduto` ) REFERENCES `produto` ( `idProduto` ) ;
+ALTER TABLE `itemVenda` ADD CONSTRAINT `fk_venda` FOREIGN KEY ( `idVenda` ) REFERENCES `venda` ( `id` );
+ALTER TABLE `itemVenda` ADD CONSTRAINT `fk_produto` FOREIGN KEY ( `idProduto` ) REFERENCES `produto` ( `id` ) ;
 
 
   
@@ -168,7 +168,7 @@ ALTER TABLE `itemVenda` ADD CONSTRAINT `fk_produto` FOREIGN KEY ( `idProduto` ) 
 --
 --
 CREATE TABLE `usuario` (
-  `idUsuario` bigint(20) NOT NULL,
+  `id` bigint(20) NOT NULL,
   `login` varchar(255) NOT NULL, 
   `senha` varchar(255) NOT NULL,
   `perfil` varchar(15) NOT NULL
@@ -179,14 +179,14 @@ CREATE TABLE `usuario` (
 -- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`idUsuario`);
+  ADD PRIMARY KEY (`id`);
  
  
 --
 -- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idUsuario` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
   
-INSERT INTO `usuario` (`idUsuario`, `login`,`senha`,`perfil`) VALUES (1, 'admin','$2a$10$NSn0FqMKCikXljNYDHiiFeNAyfsExD2ccIuj6GE62liodPu/Pelgm','ROLE_ADMIN');
-INSERT INTO `usuario` (`idUsuario`, `login`,`senha`,`perfil`) VALUES (2, 'usuario_01','$2a$10$NSn0FqMKCikXljNYDHiiFeNAyfsExD2ccIuj6GE62liodPu/Pelgm','ROLE_USUARIO');
+INSERT INTO `usuario` (`id`, `login`,`senha`,`perfil`) VALUES (1, 'admin','$2a$10$NSn0FqMKCikXljNYDHiiFeNAyfsExD2ccIuj6GE62liodPu/Pelgm','ROLE_ADMIN');
+INSERT INTO `usuario` (`id`, `login`,`senha`,`perfil`) VALUES (2, 'usuario_01','$2a$10$NSn0FqMKCikXljNYDHiiFeNAyfsExD2ccIuj6GE62liodPu/Pelgm','ROLE_USUARIO');

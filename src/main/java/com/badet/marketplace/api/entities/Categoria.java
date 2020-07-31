@@ -20,7 +20,6 @@ public class Categoria implements Serializable  {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="idCategoria")
 	public Long getId() {
 		return id;
 	}

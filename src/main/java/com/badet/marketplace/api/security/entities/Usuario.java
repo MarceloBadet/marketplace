@@ -17,16 +17,12 @@ import com.badet.marketplace.api.security.enums.PerfilEnum;
 @Table(name = "usuario")
 public class Usuario implements Serializable{
 
-	private static final long serialVersionUID = 7248672948935821140L;
+	private static final long serialVersionUID = -5467982048161903383L;
 
 	private Long id;
-	private String email;
+	private String login;
 	private String senha;
 	private PerfilEnum perfil;
-	
-	public Usuario() {
-		
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,12 +33,12 @@ public class Usuario implements Serializable{
 		this.id = id;
 	}
 
-	@Column(name = "email", nullable = false)
-	public String getEmail() {
-		return email;
+	@Column(name = "login", nullable = false)
+	public void setLogin(String login) {
+		this.login = login;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public String getLogin() {
+		return login;
 	}
 
 	@Column(name = "senha", nullable = false)
@@ -52,7 +48,7 @@ public class Usuario implements Serializable{
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "perfil", nullable = false)
 	public PerfilEnum getPerfil() {

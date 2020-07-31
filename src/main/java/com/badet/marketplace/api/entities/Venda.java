@@ -28,7 +28,6 @@ public class Venda implements Serializable  {
 		
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="idVenda")
 	public Long getId() {
 		return id;
 	}
