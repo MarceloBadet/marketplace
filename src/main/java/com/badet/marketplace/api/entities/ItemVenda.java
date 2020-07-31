@@ -4,12 +4,16 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.badet.marketplace.api.enums.AvaliacaoEnum;
 
 @Entity
 @Table(name = "itemVenda")
@@ -21,7 +25,7 @@ public class ItemVenda implements Serializable  {
 	private Venda venda;
 	private Produto produto;
 	private Integer quantidade;
-	private Integer avaliacao;
+	private AvaliacaoEnum avaliacao;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -59,11 +63,12 @@ public class ItemVenda implements Serializable  {
 		this.quantidade = quantidade;
 	}
 	
-	@Column(name = "avaliacao", nullable = false)
-	public Integer getAvaliacao() {
+	@Enumerated(EnumType.ORDINAL)
+	@Column(name = "avaliacao")
+	public AvaliacaoEnum getAvaliacao() {
 		return avaliacao;
 	}
-	public void setAvaliacao(Integer avaliacao) {
+	public void setAvaliacao(AvaliacaoEnum avaliacao) {
 		this.avaliacao = avaliacao;
 	}
 	
