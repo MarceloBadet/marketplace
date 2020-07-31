@@ -77,7 +77,7 @@ CREATE TABLE `produto` (
   `nome` varchar(255) NOT NULL, 
   `descricao` varchar(1000) NOT NULL,
   `idCategoria` bigint(20),
-  `data_criacao` datetime NOT NULL,
+  `dataCriacao` datetime NOT NULL,
   `score` int
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -107,7 +107,7 @@ CREATE TABLE `venda` (
   `idVenda` bigint(20) NOT NULL,
   `idVendedor` bigint(20), 
   `idComprador` bigint(20), 
-  `data_venda` datetime NOT NULL
+  `dataVenda` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
