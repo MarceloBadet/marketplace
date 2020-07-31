@@ -76,8 +76,8 @@ CREATE TABLE `produto` (
   `id` bigint(20) NOT NULL,
   `nome` varchar(255) NOT NULL, 
   `descricao` varchar(1000) NOT NULL,
-  `idCategoria` bigint(20),
-  `dataCriacao` datetime NOT NULL,
+  `id_categoria` bigint(20),
+  `data_criacao` datetime NOT NULL,
   `score` int
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -96,7 +96,7 @@ ALTER TABLE `produto`
 --
 -- FOREIGN_KEY for `categoria`
 --
-ALTER TABLE `produto` ADD CONSTRAINT `fk_categoria` FOREIGN KEY ( `idCategoria` ) REFERENCES `categoria` ( `id` );
+ALTER TABLE `produto` ADD CONSTRAINT `fk_categoria` FOREIGN KEY ( `id_categoria` ) REFERENCES `categoria` ( `id` );
 
 --
 --
@@ -105,9 +105,9 @@ ALTER TABLE `produto` ADD CONSTRAINT `fk_categoria` FOREIGN KEY ( `idCategoria` 
 --
 CREATE TABLE `venda` (
   `id` bigint(20) NOT NULL,
-  `idVendedor` bigint(20), 
-  `idComprador` bigint(20), 
-  `dataVenda` datetime NOT NULL
+  `id_vendedor` bigint(20), 
+  `id_comprador` bigint(20), 
+  `data_venda` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -125,8 +125,8 @@ ALTER TABLE `venda`
 --
 -- FOREIGN_KEY for `vendendor`, `comprador`
 --
-ALTER TABLE `venda` ADD CONSTRAINT `fk_vendedor` FOREIGN KEY ( `idVendedor` ) REFERENCES `vendedor` ( `id` );
-ALTER TABLE `venda` ADD CONSTRAINT `fk_comprador` FOREIGN KEY ( `idComprador` ) REFERENCES `comprador` ( `id` );
+ALTER TABLE `venda` ADD CONSTRAINT `fk_vendedor` FOREIGN KEY ( `id_vendedor` ) REFERENCES `vendedor` ( `id` );
+ALTER TABLE `venda` ADD CONSTRAINT `fk_comprador` FOREIGN KEY ( `id_comprador` ) REFERENCES `comprador` ( `id` );
 
   
 --
@@ -134,10 +134,10 @@ ALTER TABLE `venda` ADD CONSTRAINT `fk_comprador` FOREIGN KEY ( `idComprador` ) 
 -- `ITEMVENDA`
 --
 --
-CREATE TABLE `itemVenda` (
+CREATE TABLE `item_venda` (
   `id` bigint(20) NOT NULL,
-  `idVenda` bigint(20), 
-  `idProduto` bigint(20), 
+  `id_venda` bigint(20), 
+  `id_produto` bigint(20), 
   `quantidade` int, 
   `avaliacao` int
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -145,20 +145,20 @@ CREATE TABLE `itemVenda` (
 --
 -- Indexes for table `itemVenda`
 --
-ALTER TABLE `itemVenda`
+ALTER TABLE `item_venda`
   ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for table `itemVenda`
 --
-ALTER TABLE `itemVenda`
+ALTER TABLE `item_venda`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 
 --
 -- FOREIGN_KEY for `venda`, `produto`
 --
-ALTER TABLE `itemVenda` ADD CONSTRAINT `fk_venda` FOREIGN KEY ( `idVenda` ) REFERENCES `venda` ( `id` );
-ALTER TABLE `itemVenda` ADD CONSTRAINT `fk_produto` FOREIGN KEY ( `idProduto` ) REFERENCES `produto` ( `id` ) ;
+ALTER TABLE `item_venda` ADD CONSTRAINT `fk_venda` FOREIGN KEY ( `id_venda` ) REFERENCES `venda` ( `id` );
+ALTER TABLE `item_venda` ADD CONSTRAINT `fk_produto` FOREIGN KEY ( `id_produto` ) REFERENCES `produto` ( `id` ) ;
 
 
   

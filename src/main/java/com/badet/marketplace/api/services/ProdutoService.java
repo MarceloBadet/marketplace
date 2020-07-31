@@ -10,8 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.badet.marketplace.api.entities.Categoria;
 import com.badet.marketplace.api.entities.Produto;
 import com.badet.marketplace.api.exception.BusinessException;
+import com.badet.marketplace.api.repositories.CategoriaRepository;
 import com.badet.marketplace.api.repositories.ItemVendaRepository;
 import com.badet.marketplace.api.repositories.ProdutoRepository;
 
@@ -24,19 +26,30 @@ public class ProdutoService {
 	private ProdutoRepository produtoRepository;
 	
 	@Autowired
+	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
 	private ItemVendaRepository itemVendaRepository;
 	
 	/**
 	 * Cadastrar o produto
 	 * 
-	 * @param cliente 
-	 * @return cliente
+	 * @param produto 
+	 * @return produto
+	 * @throws BusinessException 
 	 */
-	public Produto persistir(Produto produto) {
+	public Produto persistir(Produto produto) throws BusinessException {
 		log.info("Persistindo um produto {} ", produto);
 
-		produto.setDataCriacao(new Date());
-		return produtoRepository.save(produto);
+		Optional<Categoria> categoria = categoriaRepository.findById(produto.getCategoria().getId());
+
+		if(categoria.isPresent()) {
+			produto.setCategoria(categoria.get());
+			produto.setDataCriacao(new Date());
+			return produtoRepository.save(produto);
+		}else {
+			throw new BusinessException("Categoria não foi encontrada.");			
+		}		
 	}
 	
 	/**
@@ -65,7 +78,7 @@ public class ProdutoService {
 	 * Retorna um produto de acordo com o id informado.
 	 * 
 	 * @param idProduto 
-	 * @return Cliente
+	 * @return Produto
 	 * @throws CpfInvalidoException 
 	 * @throws CpfNaoEncontradoException 
 	 */
