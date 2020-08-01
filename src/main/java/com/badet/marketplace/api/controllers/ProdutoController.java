@@ -1,5 +1,7 @@
 package com.badet.marketplace.api.controllers;
 
+import java.util.Date;
+
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -25,7 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.badet.marketplace.api.dtos.AtualizarProdutoDto;
 import com.badet.marketplace.api.dtos.CadastroProdutoDto;
+import com.badet.marketplace.api.dtos.ProdutoConsultaDto;
 import com.badet.marketplace.api.dtos.ProdutoDto;
+import com.badet.marketplace.api.dtos.RetornoConsultaPorNomeDto;
 import com.badet.marketplace.api.entities.Produto;
 import com.badet.marketplace.api.exception.BusinessException;
 import com.badet.marketplace.api.response.Response;
@@ -147,7 +151,7 @@ public class ProdutoController {
 	 * @param idProduto
 	 * @return ProdutoDto
 	 */	
-	@GetMapping(value = "/consultar/produto/{idProduto}")
+	@GetMapping(value = "/consultar/{idProduto}/produto/")
 	public ResponseEntity<Response<ProdutoDto>> consultarPorId(@PathVariable("idProduto") Long idProduto) {
 		log.info("Buscando Produto por id {} ", idProduto);
 		
@@ -184,5 +188,37 @@ public class ProdutoController {
 
 		response.setData(listaProdutosDto);
 		return ResponseEntity.ok(response);
-	}	
+	}
+	
+	/**
+	 * Consultar produtos por nome
+	 * 
+	 * @param nome
+	 * @return RetornoConsultaPorNomeDto
+	 */	
+	@GetMapping(value = "/consultar/produto/")
+	public ResponseEntity<Response<RetornoConsultaPorNomeDto>> consultarPorNome(@RequestParam("nome") String nome, @RequestParam(value="pag", defaultValue = "0") int pagina) {
+		log.info("Buscando Produtos por nome.  ", nome);
+
+		Response<RetornoConsultaPorNomeDto> response = new Response<RetornoConsultaPorNomeDto>();
+		RetornoConsultaPorNomeDto retorno = new RetornoConsultaPorNomeDto();
+
+		try {
+			Page<Produto> listaProdutos = produtoService.consultarPorNomeOrdenado(nome, PageRequest.of(pagina, this.quantidadePorPagina));
+			Page<ProdutoConsultaDto> listaProdutosDto = listaProdutos.map(produto -> ConvertDtoProdutoUtils.converterProdutoParaConsultaDto(produto));
+	
+			retorno.setTermoPesquisado(nome);
+			retorno.setDataAtual(new Date());
+			retorno.setListaProduto(listaProdutosDto.toList());
+		} catch (BusinessException e) {
+			response.getErrors().add(e.getMessage());
+			return ResponseEntity.unprocessableEntity().body(response);
+		} catch (Exception e) {
+			response.getErrors().add(e.getMessage());
+			return ResponseEntity.badRequest().body(response);
+		}
+	
+		response.setData(retorno);
+		return ResponseEntity.ok(response);
+	}
 }

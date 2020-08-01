@@ -7,6 +7,7 @@ import java.util.List;
 import com.badet.marketplace.api.dtos.AtualizarProdutoDto;
 import com.badet.marketplace.api.dtos.CadastroProdutoDto;
 import com.badet.marketplace.api.dtos.CategoriaDto;
+import com.badet.marketplace.api.dtos.ProdutoConsultaDto;
 import com.badet.marketplace.api.dtos.ProdutoDto;
 import com.badet.marketplace.api.entities.Categoria;
 import com.badet.marketplace.api.entities.Produto;
@@ -43,15 +44,25 @@ public class ConvertDtoProdutoUtils {
 		return produtoDto;
 	}
 	
-	public static List<ProdutoDto> converterProdutoParaDto(List<Produto> listaProdutos) {
-		List<ProdutoDto> listaProdutosDto = new ArrayList<ProdutoDto>();
+	public static ProdutoConsultaDto converterProdutoParaConsultaDto(Produto produto) {
+		ProdutoConsultaDto produtoDto = new ProdutoConsultaDto();
+		produtoDto.setId(produto.getId());
+		produtoDto.setNome(produto.getNome());
+		produtoDto.setDescricao(produto.getDescricao());
+		produtoDto.setDataCriacao(produto.getDataCriacao());
+		produtoDto.setScore(produto.getScore());
+		return produtoDto;
+	}
+	
+	public static List<ProdutoConsultaDto> converterProdutoParaListaConsultaDto(List<Produto> listaProdutos) {
+		List<ProdutoConsultaDto> listaProdutoConsultaDto = new ArrayList<ProdutoConsultaDto>();
 
 		if(listaProdutos != null) {
 			for(Produto produto : listaProdutos) {
-				listaProdutosDto.add(converterProdutoParaDto(produto));
+				listaProdutoConsultaDto.add(converterProdutoParaConsultaDto(produto));
 			}
 		}
 
-		return listaProdutosDto;
+		return listaProdutoConsultaDto;
 	}	
 }

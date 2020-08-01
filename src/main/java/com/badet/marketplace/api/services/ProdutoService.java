@@ -104,14 +104,20 @@ public class ProdutoService {
 	}
 	
 	/**
-	 * Retorna uma lista contendo todos os produtos da base.
+	 * Retorna uma lista de produtos por nome.
 	 * 
 	 * @param 
 	 * @return List<Produto>
+	 * @throws BusinessException 
 	 */
-	public Page<Produto> consultarPorNomeOrdenado(String nomeProduto, Pageable pageable) {
-		log.info("Buscando todos os produtos, filtrados pelo.");
-		return produtoRepository.findAll(pageable);
+	public Page<Produto> consultarPorNomeOrdenado(String nome, Pageable pageable) throws BusinessException {
+		log.info("Buscando lista de produtos ordenado pelo score.");
+
+		if(nome == null || nome.isEmpty() || nome.length() < 4) {
+			throw new BusinessException("O nome pesquisado deve conter mais que 3 caracteres.");			
+		}
+
+		return produtoRepository.consultarPorNomeOrdenado(nome, pageable);
 	}
 
 	/**

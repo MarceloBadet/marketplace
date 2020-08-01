@@ -20,6 +20,4 @@ public class AtualizarProdutoDto extends CadastroProdutoDto {
 	public String toString() {
 		return "AtualizarProdutoDto [id=" + id + "]";
 	}
-
-	
 }
