@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.badet.marketplace.api.dtos.AtualizarProdutoDto;
 import com.badet.marketplace.api.dtos.CadastroProdutoDto;
 import com.badet.marketplace.api.dtos.CategoriaDto;
 import com.badet.marketplace.api.dtos.ProdutoDto;
@@ -18,10 +19,13 @@ public class ConvertDtoProdutoUtils {
 		produto.setNome(cadastroProdutoDto.getNome());
 		produto.setDescricao(cadastroProdutoDto.getDescricao());;
 		Categoria categoria = new Categoria();
-		categoria.setId(cadastroProdutoDto.getIdCategoria());
+		categoria.setId(Long.valueOf(cadastroProdutoDto.getIdCategoria()));
 		produto.setCategoria(categoria);
 		produto.setDataCriacao(new Date());
-		produto.setScore(0);
+		if(cadastroProdutoDto instanceof AtualizarProdutoDto) {
+			produto.setScore(0);
+			produto.setId(Long.valueOf((((AtualizarProdutoDto)cadastroProdutoDto).getId())));
+		}
 		return produto;
 	}
 	

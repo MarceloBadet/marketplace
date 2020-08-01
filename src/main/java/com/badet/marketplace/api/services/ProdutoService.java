@@ -41,15 +41,25 @@ public class ProdutoService {
 	public Produto persistir(Produto produto) throws BusinessException {
 		log.info("Persistindo um produto {} ", produto);
 
-		Optional<Categoria> categoria = categoriaRepository.findById(produto.getCategoria().getId());
+		Optional<Categoria> optionalCategoria = categoriaRepository.findById(produto.getCategoria().getId());
+	
+		if(!optionalCategoria.isPresent()) {
+			throw new BusinessException("Categoria não foi encontrada.");	
+		}
+		
+		produto.setCategoria(optionalCategoria.get());
 
-		if(categoria.isPresent()) {
-			produto.setCategoria(categoria.get());
-			produto.setDataCriacao(new Date());
-			return produtoRepository.save(produto);
+		if(produto.getId() != null) {
+			Optional<Produto> optionalProduto = produtoRepository.findById(produto.getId());
+			
+			if(!optionalProduto.isPresent()) {
+				throw new BusinessException("Produto não foi encontrado.");			
+			}
 		}else {
-			throw new BusinessException("Categoria não foi encontrada.");			
-		}		
+			produto.setDataCriacao(new Date());
+		}	
+		
+		return produtoRepository.save(produto);
 	}
 	
 	/**
