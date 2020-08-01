@@ -1,0 +1,47 @@
+[33mcommit a53c5dbcdda08ff4a86b19983f6c86b232e90d62[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: Marcelo Badet <marcelo.badet@gmail.com>
+Date:   Sat Aug 1 15:14:52 2020 -0300
+
+    Criação da API com os métodos de Cadastro, Atualizacao e remocao
+
+[33mcommit c83f8ffd5f69eca229ca799396b56e8dfb9177e5[m
+Author: Marcelo Badet <marcelo.badet@gmail.com>
+Date:   Fri Jul 31 18:37:25 2020 -0300
+
+    Criação da API de cadastro de produto.
+
+[33mcommit 814196bebaf4f149b960ea1d604d0a47d17d5507[m
+Author: Marcelo Badet <marcelo.badet@gmail.com>
+Date:   Fri Jul 31 14:47:16 2020 -0300
+
+    Criação de autenticação para APIs
+
+[33mcommit ea4da2b559e83e6ee1f424ef4168426514319667[m
+Author: Marcelo Badet <marcelo.badet@gmail.com>
+Date:   Fri Jul 31 00:12:53 2020 -0300
+
+    Criação do CRUD de Produtos
+
+[33mcommit 3a6fdc6f5093d758832630257853741470dca1b9[m
+Author: Marcelo Badet <marcelo.badet@gmail.com>
+Date:   Thu Jul 30 22:08:37 2020 -0300
+
+    Mapeamento das tabela de banco de dados para entidades JPA
+
+[33mcommit c5b4de95b5db00e2dae1a84b0a250d151e150f2e[m
+Author: Marcelo Badet <marcelo.badet@gmail.com>
+Date:   Thu Jul 30 17:51:23 2020 -0300
+
+    Criação dos scripts de banco e configuracao das bibliotecas
+
+[33mcommit 9ad978fab309ce1f5cd0baf99ca0e2d1fbccef9e[m
+Author: Marcelo Badet <marcelo.badet@gmail.com>
+Date:   Thu Jul 30 07:59:21 2020 -0300
+
+    Criação do projeto
+
+[33mcommit ac68acbb79f6930c723692d06b166335c3885ac4[m
+Author: MarceloBadet <47163208+MarceloBadet@users.noreply.github.com>
+Date:   Thu Jul 30 07:22:18 2020 -0300
+
+    Initial commit
