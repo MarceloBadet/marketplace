@@ -48,6 +48,10 @@ public class ProdutoServiceTest {
 	@Autowired
 	private ProdutoService produtoService;	
 	
+	/**
+	 * Insere os produtos no banco H2 que serão utilizado no teste unitário
+	 * 
+	 */	
 	@Before
 	public void setUp() throws Exception{
 		Categoria categoria = new Categoria();
@@ -79,13 +83,20 @@ public class ProdutoServiceTest {
 		this.produtoRepository.save(produto3);
 	}
 	
+	/**
+	 * Apaga todos os produtos do banco H2
+	 * 
+	 */		
 	@After
 	public final void tearDown() {
 		this.produtoRepository.deleteAll();
 		this.categoriaRepository.deleteAll();
 	}	
 	
-	//Verifica a inserção
+	/**
+	 * Verifica se o produto esta sendo inserido corretamente.
+	 * 
+	 */	
 	@Test
 	public void testPersistirProduto() {
 		Produto produtoInsert = null;
@@ -109,7 +120,10 @@ public class ProdutoServiceTest {
 		assertNotNull(produtoInsert);
 	}	
 	
-	//Verifica a alteração
+	/**
+	 * Verifica se o produto esta sendo alterado corretamente.
+	 * 
+	 */	
 	@Test
 	public void testPersistirProdutoAlterar() {
 		Categoria categoria = new Categoria();
@@ -147,7 +161,10 @@ public class ProdutoServiceTest {
 		assertEquals("Alteracao", produtoAlterar.getNome());
 	}		
 	
-	//Verificar a exceção lançada quando a categoria não é encontrada
+	/**
+	 * Verificar se a exceção esta sendo lançada corretamente se a categoria não é encontrada.
+	 * 
+	 */		
 	@Test(expected = BusinessException.class)
 	public void testPersistirProduto_BusinessException() throws Exception {
 		Categoria categoria = new Categoria();
@@ -166,7 +183,10 @@ public class ProdutoServiceTest {
 		} 
 	}
 	
-	//Verificar consulta por Id
+	/**
+	 * Verifica se a consulta por Id esta retornando o produto correto.
+	 * 
+	 */		
 	@Test
 	public void testBuscarProdutoPorId() {
 		Categoria categoria = new Categoria();
@@ -197,7 +217,10 @@ public class ProdutoServiceTest {
 		assertEquals(produto.getId(), produtoConsultar.getId());
 	}
 	
-	//Verificar a exceção lançada quando o produto não é encontrado
+	/**
+	 * Verificar se a exceção esta sendo lançada corretamente quando o produto não é encontrado.
+	 * 
+	 */			
 	@Test(expected = BusinessException.class)
 	public void testBuscarProdutoPorId_BusinessException() throws Exception {
 		
@@ -212,7 +235,10 @@ public class ProdutoServiceTest {
 		assertFalse(produto != null);
 	}	
 	
-	//Verificar consulta por Nome
+	/**
+	 * Verifica se a consulta por nome esta retornando a quantidade de produtos e a ordenação esta correta.
+	 * 
+	 */	
 	@Test
 	public void testBuscarProdutoPorNome() {
 		
@@ -233,7 +259,10 @@ public class ProdutoServiceTest {
 		assertEquals(SCORE_5, produto.getScore());
 	}
 
-	//Verificar a exceção lançada quando a quantidade de caracteres é menor que a esperada
+	/**
+	 * Verificar se a exceção está sendo lançada corretamente quando a quantidade de caracteres é menor que a esperada.
+	 * 
+	 */		
 	@Test(expected = BusinessException.class)
 	public void testBuscarProdutoPorNome_BusinessException() throws Exception {
 		
@@ -244,8 +273,10 @@ public class ProdutoServiceTest {
 		}
 	}		
 
-	//Verifica a consulta de todos os produtos
-	@Test
+	/**
+	 * Verifica se a consulta de todos os produtos esta retornando a quantidade esperada.
+	 * 
+	 */	
 	public void testBuscarTodosProduto() {
 		
 		Page<Produto> listaProdutos = this.produtoService.consultarTodos(PageRequest.of(0, this.quantidadePorPagina));
@@ -254,7 +285,10 @@ public class ProdutoServiceTest {
 		assertEquals(3, listaProdutos.toList().size());
 	}
 	
-	//Verifica a remoção do produto
+	/**
+	 * Verifica se o produto esta sendo removido corretamente.
+	 * 
+	 */		
 	@Test
 	public void testRemoverProduto() {
 		Produto produto = null;
@@ -270,7 +304,10 @@ public class ProdutoServiceTest {
 		assertNull(produto);
 	}	
 
-	//Valida a excecão de lançada quando o produto não é encontrado
+	/**
+	 * Verifica se a excecão esta sendo lançada corretamente quando o produto não é encontrado.
+	 * 
+	 */	
 	@Test(expected = BusinessException.class)
 	public void testRemoverProduto_BusinessException() throws Exception {
 		try {

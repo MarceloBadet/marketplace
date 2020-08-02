@@ -3,9 +3,7 @@ package com.badet.marketplace.api.controllers;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,8 +26,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.badet.marketplace.api.dtos.AtualizarProdutoDto;
 import com.badet.marketplace.api.dtos.CadastroProdutoDto;
-import com.badet.marketplace.api.dtos.ProdutoConsultaDto;
-import com.badet.marketplace.api.dtos.RetornoConsultaPorNomeDto;
 import com.badet.marketplace.api.entities.Categoria;
 import com.badet.marketplace.api.entities.Produto;
 import com.badet.marketplace.api.exception.BusinessException;
@@ -64,6 +60,10 @@ public class ProdutoControllerTest {
 	@MockBean
 	private ProdutoService produtoService;
 	
+	/**
+	 * Retorna o objeto Produto populado.
+	 * 
+	 */		
 	private Produto obterDadosProduto() {
 		Categoria categoria = new Categoria();
 		categoria.setId(1L);
@@ -80,6 +80,10 @@ public class ProdutoControllerTest {
 		return produto;
 	}
 	
+	/**
+	 * Retorna o json do objeto CadastroProdutoDto.
+	 * 
+	 */			
 	private String obterJsonRequisicaoCadastroJson() throws JsonProcessingException {
 		CadastroProdutoDto cadastroProdutoDto = new CadastroProdutoDto();
 		cadastroProdutoDto.setNome("Produto 1");
@@ -90,6 +94,10 @@ public class ProdutoControllerTest {
 		return mapper.writeValueAsString(cadastroProdutoDto);
 	}	
 	
+	/**
+	 * Retorna o json do objeto AtualizarProdutoDto.
+	 * 
+	 */		
 	private String obterJsonRequisicaoAtualizarJson() throws JsonProcessingException {
 		AtualizarProdutoDto atualizarProdutoDto = new AtualizarProdutoDto();
 		atualizarProdutoDto.setId("1");
@@ -101,26 +109,20 @@ public class ProdutoControllerTest {
 		return mapper.writeValueAsString(atualizarProdutoDto);
 	}		
 	
+	/**
+	 * Retorna a lista de produtos paginados.
+	 * 
+	 */		
 	private Page<Produto> obterListaDadosProduto() {
 		final Page<Produto> page = Mockito.mock(Page.class);
 		return page;
 	}		
+
 	
-	@Test
-	@WithMockUser
-	public void testBuscarProdutoIdValido() throws Exception  {
-		BDDMockito.given(this.produtoService.consultarPorId(Mockito.anyLong())).willReturn(this.obterDadosProduto());
-		
-		mvc.perform(MockMvcRequestBuilders.get(BUSCAR_PRODUTO_ID_URL + PRODUTO_ID_1)
-					.accept(MediaType.APPLICATION_JSON))
-					.andExpect(status().isOk())
-					.andExpect(jsonPath("$.data.id").value("1"))
-					.andExpect(jsonPath("$.data.nome").value("Produto 1"))
-					.andExpect(jsonPath("$.data.descricao").value("Teste Descricao Produto 01"))
-					.andExpect(jsonPath("$.errors").isEmpty());
-	}
-	
-	
+	/**
+	 * Verifica se o status de retorno Http esta correto quando o produto é cadastrado corretamente.
+	 * 
+	 */	
 	@Test
 	@WithMockUser
 	public void testCadastrarProdutoValido() throws Exception  {
@@ -139,6 +141,10 @@ public class ProdutoControllerTest {
 					.andExpect(jsonPath("$.errors").isEmpty());
 	}
 
+	/**
+	 * Verifica se o status de retorno Http esta correto quando a categoria informada no cadastro do produto está inválida.
+	 * 
+	 */			
 	@Test
 	@WithMockUser
 	public void testCadastrarProdutoCategoriaInvalido() throws Exception  {
@@ -152,6 +158,10 @@ public class ProdutoControllerTest {
 					.andExpect(jsonPath("$.errors").value("Categoria não foi encontrada."));
 	}	
 	
+	/**
+	 * Verifica se o status de retorno Http esta correto quando a consulta por Id retorna um produto.
+	 * 
+	 */			
 	@Test
 	@WithMockUser
 	public void testAtualizarProdutoValido() throws Exception  {
@@ -170,6 +180,29 @@ public class ProdutoControllerTest {
 					.andExpect(jsonPath("$.errors").isEmpty());
 	}	
 	
+	
+	/**
+	 * Verifica se o status de retorno Http esta correto quando o produto é retornado nao consulta por Id.
+	 * 
+	 */		
+	@Test
+	@WithMockUser
+	public void testBuscarProdutoIdValido() throws Exception  {
+		BDDMockito.given(this.produtoService.consultarPorId(Mockito.anyLong())).willReturn(this.obterDadosProduto());
+		
+		mvc.perform(MockMvcRequestBuilders.get(BUSCAR_PRODUTO_ID_URL + PRODUTO_ID_1)
+					.accept(MediaType.APPLICATION_JSON))
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("$.data.id").value("1"))
+					.andExpect(jsonPath("$.data.nome").value("Produto 1"))
+					.andExpect(jsonPath("$.data.descricao").value("Teste Descricao Produto 01"))
+					.andExpect(jsonPath("$.errors").isEmpty());
+	}	
+	
+	/**
+	 * Verifica se o status de retorno Http esta correto quando na consulta por Id o produto não é encontrado.
+	 * 
+	 */			
 	@Test
 	@WithMockUser
 	public void testBuscarProdutoIdInvalido() throws Exception  {
@@ -181,6 +214,10 @@ public class ProdutoControllerTest {
 					.andExpect(jsonPath("$.errors").value("Produto não foi encontrado."));
 	}
 	
+	/**
+	 * Verifica se o status de retorno Http esta correto quando todos os produtos são consultados.
+	 * 
+	 */			
 	@Test
 	@WithMockUser
 	public void testBuscarTodos() throws Exception  {
@@ -192,6 +229,10 @@ public class ProdutoControllerTest {
 					.andExpect(jsonPath("$.errors").isEmpty());
 	}
 	
+	/**
+	 * Verifica se o status de retorno Http esta correto quando a consulta de nome é executada.
+	 * 
+	 */				
 	@Test
 	@WithMockUser
 	public void testBuscarProdutoNomeValido() throws Exception  {
@@ -204,7 +245,10 @@ public class ProdutoControllerTest {
 				.andExpect(jsonPath("$.errors").isEmpty());
 	}
 	
-	
+	/**
+	 * Verifica se o status de retorno Http esta correto quando ele é removido.
+	 * 
+	 */		
 	@Test
 	@WithMockUser(username = "admin", roles = {"ADMIN"})	
 	public void testRemoverProdutoValido() throws Exception  {
@@ -215,6 +259,10 @@ public class ProdutoControllerTest {
 				.andExpect(status().isOk());
 	}
 
+	/**
+	 * Verifica se o status de retorno Http esta correto quando o produto não é encontrado.
+	 * 
+	 */	
 	@Test
 	@WithMockUser(username = "admin", roles = {"ADMIN"})
 	public void testRemoverProdutoInvalido() throws Exception  {

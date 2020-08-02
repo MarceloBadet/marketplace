@@ -20,7 +20,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.badet.marketplace.api.entities.Categoria;
 import com.badet.marketplace.api.entities.Produto;
-import com.badet.marketplace.api.services.ProdutoService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -39,7 +38,10 @@ public class ProdutoRepositoryTest {
 	@Autowired
 	private CategoriaRepository categoriaRepository;
 	
-
+	/**
+	 * Insere os produtos no banco H2 que serão utilizado no teste unitário
+	 * 
+	 */
 	@Before
 	public void setUp() throws Exception{
 		Categoria categoria = new Categoria();
@@ -71,13 +73,20 @@ public class ProdutoRepositoryTest {
 		this.produtoRepository.save(produto3);
 	}
 	
-	
+	/**
+	 * Apaga todos os produtos do banco H2
+	 * 
+	 */	
 	@After
 	public final void tearDown() {
 		this.produtoRepository.deleteAll();
 		this.categoriaRepository.deleteAll();
 	}
 	
+	/**
+	 * Verifica se a consulta por Id esta retornando o produto correto.
+	 * 
+	 */	
 	@Test
 	public void testBuscarPorId() {
 		Optional<Produto> optionalproduto = this.produtoRepository.findById(PRODUTO_ID_1);
@@ -85,6 +94,10 @@ public class ProdutoRepositoryTest {
 		assertEquals(PRODUTO_ID_1, optionalproduto.get().getId());
 	}
 	
+	/**
+	 * Verifica se a consulta por nome esta retornando a quantidade de produtos e a ordenação esta correta.
+	 * 
+	 */	
 	@Test
 	public void testBuscarPorNome() {
 		Page<Produto> listaProdutos = this.produtoRepository.consultarPorNome("Produto", PageRequest.of(0, this.quantidadePorPagina));
