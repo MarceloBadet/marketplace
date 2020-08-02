@@ -88,11 +88,11 @@ public class ProdutoService {
 			throw new BusinessException("Produto não pode ser removido.");	
 		}
 		
-		if(retorno.isPresent()) {
-			produtoRepository.delete(retorno.get());
-		}else {
+		if(!retorno.isPresent()) {
 			throw new BusinessException("Produto não foi encontrado.");			
 		}
+
+		produtoRepository.delete(retorno.get());
 	}
 	
 	/**
@@ -108,11 +108,11 @@ public class ProdutoService {
 		log.info("Buscando um produto {} ", idProduto);
 		Optional<Produto> retorno = produtoRepository.findById(idProduto); 
 		
-		if(retorno.isPresent()) {
-			return retorno.get();
-		}else {
-			throw new BusinessException("Produto não foi encontrado.");			
+		if(!retorno.isPresent()) {
+			throw new BusinessException("Produto não foi encontrado.");
 		}
+		
+		return retorno.get();
 	}
 	
 	/**

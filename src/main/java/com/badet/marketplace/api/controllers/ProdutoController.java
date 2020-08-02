@@ -151,7 +151,7 @@ public class ProdutoController {
 	 * @param idProduto
 	 * @return ProdutoDto
 	 */	
-	@GetMapping(value = "/consultar/{idProduto}/produto/")
+	@GetMapping(value = "/consultar/{idProduto}")
 	public ResponseEntity<Response<ProdutoDto>> consultarPorId(@PathVariable("idProduto") Long idProduto) {
 		log.info("Buscando Produto por id {} ", idProduto);
 		
@@ -196,7 +196,7 @@ public class ProdutoController {
 	 * @param nome
 	 * @return RetornoConsultaPorNomeDto
 	 */	
-	@GetMapping(value = "/consultar/produto/")
+	@GetMapping(value = "/consultar/nome/")
 	public ResponseEntity<Response<RetornoConsultaPorNomeDto>> consultarPorNome(@RequestParam("nome") String nome, @RequestParam(value="pag", defaultValue = "0") int pagina) {
 		log.info("Buscando Produtos por nome.  ", nome);
 
@@ -209,7 +209,9 @@ public class ProdutoController {
 	
 			retorno.setTermoPesquisado(nome);
 			retorno.setDataAtual(new Date());
-			retorno.setListaProduto(listaProdutosDto.toList());
+			if(listaProdutosDto != null) {
+				retorno.setListaProduto(listaProdutosDto.toList());
+			}
 		} catch (BusinessException e) {
 			response.getErrors().add(e.getMessage());
 			return ResponseEntity.unprocessableEntity().body(response);
