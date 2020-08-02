@@ -6,6 +6,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,6 +41,10 @@ public class ProdutoService {
 	 * @return produto
 	 * @throws BusinessException 
 	 */
+	@Caching(evict = {
+	        @CacheEvict(value = "consultarTodosProdutos", allEntries=true),
+	        @CacheEvict(value = "consultarProdutosPorNome", allEntries=true),
+	        @CacheEvict(value = "consultarProdutosPorId", allEntries=true)})		
 	public Produto persistir(Produto produto) throws BusinessException {
 		log.info("Persistindo um produto {} ", produto);
 
@@ -69,6 +76,10 @@ public class ProdutoService {
 	 * @return 
 	 * @throws BusinessException 
 	 */
+	@Caching(evict = {
+	        @CacheEvict(value = "consultarTodosProdutos", allEntries=true),
+	        @CacheEvict(value = "consultarProdutosPorNome", allEntries=true),
+	        @CacheEvict(value = "consultarProdutosPorId", allEntries=true)})		
 	public void remover(Long idProduto) throws BusinessException {
 		log.info("Removendo um produto {} ", idProduto);
 		Optional<Produto> retorno = produtoRepository.findById(idProduto); 
@@ -92,6 +103,7 @@ public class ProdutoService {
 	 * @throws CpfInvalidoException 
 	 * @throws CpfNaoEncontradoException 
 	 */
+	@Cacheable("consultarProdutosPorId")
 	public Produto consultarPorId(Long idProduto) throws BusinessException {
 		log.info("Buscando um produto {} ", idProduto);
 		Optional<Produto> retorno = produtoRepository.findById(idProduto); 
@@ -110,14 +122,15 @@ public class ProdutoService {
 	 * @return List<Produto>
 	 * @throws BusinessException 
 	 */
-	public Page<Produto> consultarPorNomeOrdenado(String nome, Pageable pageable) throws BusinessException {
+	@Cacheable("consultarProdutosPorNome")
+	public Page<Produto> consultarPorNome(String nome, Pageable pageable) throws BusinessException {
 		log.info("Buscando lista de produtos ordenado pelo score.");
 
 		if(nome == null || nome.isEmpty() || nome.length() < 4) {
 			throw new BusinessException("O nome pesquisado deve conter mais que 3 caracteres.");			
 		}
 
-		return produtoRepository.consultarPorNomeOrdenado(nome, pageable);
+		return produtoRepository.consultarPorNome(nome, pageable);
 	}
 
 	/**
@@ -126,6 +139,7 @@ public class ProdutoService {
 	 * @param 
 	 * @return List<Produto>
 	 */
+	@Cacheable("consultarTodosProdutos")
 	public Page<Produto> consultarTodos(Pageable pageable) {
 		log.info("Buscando todos os Produto ");
 		return produtoRepository.findAll(pageable);

@@ -1,0 +1,15 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		 xsi:noNamespaceSchemaLocation="ehcache.xsd">
+		 <cache name="consultarTodosProdutos" 
+		 		maxEntriesLocalHeap="1000"
+		 		timeToLiveSeconds="3600">
+		 </cache>
+		 <cache name="consultarProdutosPorNome" 
+		 		maxEntriesLocalHeap="200"
+		 		timeToLiveSeconds="3600">
+		 </cache>
+		 <cache name="consultarProdutosPorId" 
+		 		maxEntriesLocalHeap="200"
+		 		timeToLiveSeconds="3600">
+		 </cache>		 		 
+</ehcache>

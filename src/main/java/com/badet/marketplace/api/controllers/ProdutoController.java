@@ -92,7 +92,7 @@ public class ProdutoController {
 	 * @return ResponseEntity<Response<ProdutoDto>>
 	 */
 	@PutMapping("/atualizar")
-	public ResponseEntity<Response<ProdutoDto>> cadastrar(@Valid @RequestBody AtualizarProdutoDto atualizarProdutoDto, 
+	public ResponseEntity<Response<ProdutoDto>> atualizar(@Valid @RequestBody AtualizarProdutoDto atualizarProdutoDto, 
 			BindingResult result) {
 		log.info("Atualizando Produto {} ", atualizarProdutoDto);
 		Response<ProdutoDto> response = new Response<ProdutoDto>();
@@ -204,7 +204,7 @@ public class ProdutoController {
 		RetornoConsultaPorNomeDto retorno = new RetornoConsultaPorNomeDto();
 
 		try {
-			Page<Produto> listaProdutos = produtoService.consultarPorNomeOrdenado(nome, PageRequest.of(pagina, this.quantidadePorPagina));
+			Page<Produto> listaProdutos = produtoService.consultarPorNome(nome, PageRequest.of(pagina, this.quantidadePorPagina));
 			Page<ProdutoConsultaDto> listaProdutosDto = listaProdutos.map(produto -> ConvertDtoProdutoUtils.converterProdutoParaConsultaDto(produto));
 	
 			retorno.setTermoPesquisado(nome);
