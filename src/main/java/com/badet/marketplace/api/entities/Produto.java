@@ -23,7 +23,7 @@ public class Produto implements Serializable  {
 	private String descricao;
 	private Categoria categoria;
 	private Date dataCriacao;
-	private Integer score;
+	private Long score;
 		
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -68,10 +68,10 @@ public class Produto implements Serializable  {
 	}
 	
 	@Column(name="score", nullable = false)
-	public Integer getScore() {
+	public Long getScore() {
 		return score;
 	}
-	public void setScore(Integer score) {
+	public void setScore(Long score) {
 		this.score = score;
 	}
 

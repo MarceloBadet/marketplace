@@ -1,5 +1,7 @@
 package com.badet.marketplace.api.services;
 
+import java.net.URISyntaxException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.badet.marketplace.api.dtos.NoticiaCategoriaDto;
 import com.badet.marketplace.api.entities.Categoria;
 import com.badet.marketplace.api.entities.Produto;
 import com.badet.marketplace.api.exception.BusinessException;
@@ -33,6 +36,9 @@ public class ProdutoService {
 	
 	@Autowired
 	private ItemVendaRepository itemVendaRepository;
+	
+	@Autowired
+	private NewsApiClientService newsApiService;
 	
 	/**
 	 * Cadastrar o produto
@@ -143,6 +149,40 @@ public class ProdutoService {
 	public Page<Produto> consultarTodos(Pageable pageable) {
 		log.info("Buscando todos os Produto ");
 		return produtoRepository.findAll(pageable);
+	}
+	
+	/**
+	 * Atualiza score do produto.
+	 * 
+	 * @param produto
+	 * @return 
+	 */
+	public void atualizarScoreProduto(Produto produto) {
+		try {
+			Long vendaDia = itemVendaRepository.consultarVendasPorDia(produto.getId());
+			vendaDia = vendaDia == null ? 0L : vendaDia;
+			
+			Calendar dataFinal = Calendar.getInstance();
+			Calendar dataInicial = Calendar.getInstance();
+			dataInicial.add(Calendar.YEAR, -1);
+			Long mediaAvaliacao = itemVendaRepository.consultarMediaAvaliacao(produto.getId(), dataInicial.getTime(), dataFinal.getTime()); 
+			mediaAvaliacao = mediaAvaliacao == null ? 0L : mediaAvaliacao;
+			
+			Calendar dataConsultaCategoria = Calendar.getInstance();
+			dataConsultaCategoria.add(Calendar.DAY_OF_MONTH, -1);
+			NoticiaCategoriaDto noticiaCategoriaDto = newsApiService.obterQuantidadeNoticiasPorCategoria(produto.getCategoria().getNome(), dataConsultaCategoria.getTime());
+			
+			Long qtdConsultaCategoria = 0L;
+			if(noticiaCategoriaDto != null && noticiaCategoriaDto.getTotalResults() != null) {
+				qtdConsultaCategoria = noticiaCategoriaDto.getTotalResults();
+			}
+			
+			produto.setScore(mediaAvaliacao + vendaDia + qtdConsultaCategoria);
+			produtoRepository.save(produto);
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

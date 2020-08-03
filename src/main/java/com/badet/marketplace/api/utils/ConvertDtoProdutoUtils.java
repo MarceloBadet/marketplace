@@ -24,7 +24,7 @@ public class ConvertDtoProdutoUtils {
 		produto.setCategoria(categoria);
 		produto.setDataCriacao(new Date());
 		if(cadastroProdutoDto instanceof AtualizarProdutoDto) {
-			produto.setScore(0);
+			produto.setScore(0L);
 			produto.setId(Long.valueOf((((AtualizarProdutoDto)cadastroProdutoDto).getId())));
 		}
 		return produto;
