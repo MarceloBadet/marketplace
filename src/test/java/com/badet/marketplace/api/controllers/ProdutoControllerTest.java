@@ -74,7 +74,7 @@ public class ProdutoControllerTest {
 		produto.setNome("Produto 1");
 		produto.setDescricao("Teste Descricao Produto 01");
 		produto.setCategoria(categoria);
-		produto.setScore(0);
+		produto.setScore(0L);
 		produto.setDataCriacao(new Date());
 	
 		return produto;

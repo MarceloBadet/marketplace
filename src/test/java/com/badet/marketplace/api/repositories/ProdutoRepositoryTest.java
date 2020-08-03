@@ -52,7 +52,7 @@ public class ProdutoRepositoryTest {
 		produto1.setNome("Produto 1");
 		produto1.setDescricao("Descricao Produto 01");
 		produto1.setCategoria(categoria);
-		produto1.setScore(0);
+		produto1.setScore(0L);
 		produto1.setDataCriacao(new Date());
 		this.produtoRepository.save(produto1);
 		
@@ -60,7 +60,7 @@ public class ProdutoRepositoryTest {
 		produto2.setNome("Produto 2");
 		produto2.setDescricao("Descricao Produto 02");
 		produto2.setCategoria(categoria);
-		produto2.setScore(5);
+		produto2.setScore(5L);
 		produto2.setDataCriacao(new Date());
 		this.produtoRepository.save(produto2);
 		
@@ -68,7 +68,7 @@ public class ProdutoRepositoryTest {
 		produto3.setNome("Produto 3");
 		produto3.setDescricao("Descricao Produto 03");
 		produto3.setCategoria(categoria);
-		produto3.setScore(0);
+		produto3.setScore(0L);
 		produto3.setDataCriacao(new Date());
 		this.produtoRepository.save(produto3);
 	}

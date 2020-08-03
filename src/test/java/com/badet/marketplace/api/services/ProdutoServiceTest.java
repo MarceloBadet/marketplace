@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.After;
@@ -21,17 +22,26 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.badet.marketplace.api.entities.Categoria;
+import com.badet.marketplace.api.entities.Comprador;
+import com.badet.marketplace.api.entities.ItemVenda;
 import com.badet.marketplace.api.entities.Produto;
+import com.badet.marketplace.api.entities.Venda;
+import com.badet.marketplace.api.entities.Vendedor;
+import com.badet.marketplace.api.enums.AvaliacaoEnum;
 import com.badet.marketplace.api.exception.BusinessException;
 import com.badet.marketplace.api.repositories.CategoriaRepository;
+import com.badet.marketplace.api.repositories.CompradorRepository;
+import com.badet.marketplace.api.repositories.ItemVendaRepository;
 import com.badet.marketplace.api.repositories.ProdutoRepository;
+import com.badet.marketplace.api.repositories.VendaRepository;
+import com.badet.marketplace.api.repositories.VendedorRepository;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public class ProdutoServiceTest {
 	
-	private static final Integer SCORE_5 = Integer.valueOf(5);
+	private static final Long SCORE_5 = Long.valueOf(5);
 	private static final Long PRODUTO_ID_1 = Long.valueOf(1);
 	private static final Long PRODUTO_ID_NAO_CADASTRADO = Long.valueOf(123456);
 	
@@ -39,11 +49,25 @@ public class ProdutoServiceTest {
 	@Value("${paginacao.qtd_por_pagina}")
 	private int quantidadePorPagina;
 	
+	private Long idProduto;
+	
 	@Autowired
 	private ProdutoRepository produtoRepository;
 	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private ItemVendaRepository itemVendaRepository;
+	
+	@Autowired
+	private VendaRepository vendaRepository;
+	
+	@Autowired
+	private CompradorRepository compradorRepository;
+	
+	@Autowired
+	private VendedorRepository vendedorRepository;
 	
 	@Autowired
 	private ProdutoService produtoService;	
@@ -62,15 +86,16 @@ public class ProdutoServiceTest {
 		produto1.setNome("Produto 1");
 		produto1.setDescricao("Descricao Produto 01");
 		produto1.setCategoria(categoria);
-		produto1.setScore(0);
+		produto1.setScore(0L);
 		produto1.setDataCriacao(new Date());
 		this.produtoRepository.save(produto1);
+		idProduto = produto1.getId();
 		
 		Produto produto2= new Produto();
 		produto2.setNome("Produto 2");
 		produto2.setDescricao("Descricao Produto 02");
 		produto2.setCategoria(categoria);
-		produto2.setScore(5);
+		produto2.setScore(5L);
 		produto2.setDataCriacao(new Date());
 		this.produtoRepository.save(produto2);
 		
@@ -78,9 +103,36 @@ public class ProdutoServiceTest {
 		produto3.setNome("Produto 3");
 		produto3.setDescricao("Descricao Produto 03");
 		produto3.setCategoria(categoria);
-		produto3.setScore(0);
+		produto3.setScore(0L);
 		produto3.setDataCriacao(new Date());
 		this.produtoRepository.save(produto3);
+		
+		Vendedor vendedor = new Vendedor();
+		vendedor.setNome("Vendedor");
+		this.vendedorRepository.save(vendedor);
+		
+		Comprador comprador = new Comprador();
+		comprador.setNome("Comprador");
+		this.compradorRepository.save(comprador);
+
+		
+		Venda venda = new Venda();
+		venda.setVendedor(vendedor);
+		venda.setComprador(comprador);
+		Calendar dataVenda = Calendar.getInstance();
+		dataVenda.add(Calendar.MONTH, -1);
+		venda.setDataVenda(dataVenda.getTime());
+		this.vendaRepository.save(venda);
+
+		
+		ItemVenda itemVenda = new ItemVenda();
+		itemVenda.setVenda(venda);
+		itemVenda.setProduto(produto1);
+		itemVenda.setQuantidade(2);
+		itemVenda.setAvaliacao(AvaliacaoEnum.MEDIANO);
+		this.itemVendaRepository.save(itemVenda);
+		
+	
 	}
 	
 	/**
@@ -89,8 +141,12 @@ public class ProdutoServiceTest {
 	 */		
 	@After
 	public final void tearDown() {
+		this.itemVendaRepository.deleteAll();
+		this.vendaRepository.deleteAll();
 		this.produtoRepository.deleteAll();
 		this.categoriaRepository.deleteAll();
+		this.compradorRepository.deleteAll();
+		this.vendedorRepository.deleteAll();
 	}	
 	
 	/**
@@ -109,7 +165,7 @@ public class ProdutoServiceTest {
 		produto.setNome("produto 05");
 		produto.setDescricao("Descricao Produto 05");
 		produto.setCategoria(categoria);
-		produto.setScore(3);
+		produto.setScore(3L);
 		produto.setDataCriacao(new Date());
 		try {
 			produtoInsert = this.produtoService.persistir(produto);
@@ -134,7 +190,7 @@ public class ProdutoServiceTest {
 		produto.setNome("produto 05");
 		produto.setDescricao("Descricao Produto 05");
 		produto.setCategoria(categoria);
-		produto.setScore(3);
+		produto.setScore(3L);
 		produto.setDataCriacao(new Date());
 		try {
 			produto = this.produtoService.persistir(produto);
@@ -173,7 +229,7 @@ public class ProdutoServiceTest {
 		Produto produto = new Produto();
 		produto.setDescricao("Descricao Produto 05");
 		produto.setCategoria(categoria);
-		produto.setScore(3);
+		produto.setScore(3L);
 		produto.setDataCriacao(new Date());
 
 		try {
@@ -197,7 +253,7 @@ public class ProdutoServiceTest {
 		produto.setNome("produto 05");
 		produto.setDescricao("Descricao Produto 05");
 		produto.setCategoria(categoria);
-		produto.setScore(3);
+		produto.setScore(3L);
 		produto.setDataCriacao(new Date());
 		try {
 			produto = this.produtoService.persistir(produto);
@@ -317,4 +373,23 @@ public class ProdutoServiceTest {
 		} 
 	}
 
+	/**
+	 * Verifica se a consulta por Id esta retornando o produto correto.
+	 * 
+	 */		
+	@Test
+	public void testAtualizaScoreProduto() {
+		Produto produto = null;
+
+		try {
+			produto = this.produtoService.consultarPorId(idProduto);
+		} catch (BusinessException e) {
+			e.printStackTrace();
+		}
+		
+		this.produtoService.atualizarScoreProduto(produto);
+		
+		assertEquals(Long.valueOf(9), produto.getScore());
+	}	
+	
 }

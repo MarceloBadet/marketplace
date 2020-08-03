@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -39,6 +40,10 @@ public class ProdutoService {
 	
 	@Autowired
 	private NewsApiClientService newsApiService;
+	
+	@Value("${valor.retorno.newsapi}")
+	private Long valorRetornoNewApi;
+	
 	
 	/**
 	 * Cadastrar o produto
@@ -168,13 +173,17 @@ public class ProdutoService {
 			Long mediaAvaliacao = itemVendaRepository.consultarMediaAvaliacao(produto.getId(), dataInicial.getTime(), dataFinal.getTime()); 
 			mediaAvaliacao = mediaAvaliacao == null ? 0L : mediaAvaliacao;
 			
-			Calendar dataConsultaCategoria = Calendar.getInstance();
-			dataConsultaCategoria.add(Calendar.DAY_OF_MONTH, -1);
-			NoticiaCategoriaDto noticiaCategoriaDto = newsApiService.obterQuantidadeNoticiasPorCategoria(produto.getCategoria().getNome(), dataConsultaCategoria.getTime());
-			
 			Long qtdConsultaCategoria = 0L;
-			if(noticiaCategoriaDto != null && noticiaCategoriaDto.getTotalResults() != null) {
-				qtdConsultaCategoria = noticiaCategoriaDto.getTotalResults();
+			if(valorRetornoNewApi == null) {
+				Calendar dataConsultaCategoria = Calendar.getInstance();
+				dataConsultaCategoria.add(Calendar.DAY_OF_MONTH, -1);
+				NoticiaCategoriaDto noticiaCategoriaDto = newsApiService.obterQuantidadeNoticiasPorCategoria(produto.getCategoria().getNome(), dataConsultaCategoria.getTime());
+				
+				if(noticiaCategoriaDto != null && noticiaCategoriaDto.getTotalResults() != null) {
+					qtdConsultaCategoria = noticiaCategoriaDto.getTotalResults();
+				}
+			}else {
+				qtdConsultaCategoria = valorRetornoNewApi;
 			}
 			
 			produto.setScore(mediaAvaliacao + vendaDia + qtdConsultaCategoria);
