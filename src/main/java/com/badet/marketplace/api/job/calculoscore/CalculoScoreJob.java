@@ -16,7 +16,7 @@ import com.badet.marketplace.api.services.ProdutoService;
 public class CalculoScoreJob {
 	
 	private static final String TODOS_OS_DIAS_DUAS_HORAS_AM = "0 0 2 * * *";
-	
+
 	@Autowired
 	private ProdutoService produtoService;
 	
